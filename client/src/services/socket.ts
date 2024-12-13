@@ -5,7 +5,7 @@ class SocketService {
   private listeners: Map<string, ((data?: any) => void)[]> = new Map();
 
   connect() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io('https://gamitar-cj8k.onrender.com');
 
     this.socket.on('connect', () => {
       console.log('Connected to server');
