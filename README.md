@@ -2,7 +2,7 @@
 ## How to run locally
 
 ``` bash
-git clone (https://github.com/Rahul-K-Saini/gamitar.git)
+git clone https://github.com/Rahul-K-Saini/gamitar.git
 ```
 ``` bash
 cd client
