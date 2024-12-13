@@ -22,8 +22,10 @@ export class GameStateManager {
 
   public updateCell(row: number, col: number, value: string, playerId: string): boolean {
     const player = this.state.players.get(playerId);
-    
+    console.log("sssssssssssssssssss")
+    console.log(player, player?.hasPlayed, this.state.grid.cells[row][col] !== '')
     if (!player || player.hasPlayed || this.state.grid.cells[row][col] !== '') {
+      console.log("sdjjsbdbvsdbvbsdjvjsdjfvsjdhfjusdjfhjsdhjfhssssssssssssssssss")
       return false;
     }
 
@@ -44,4 +46,9 @@ export class GameStateManager {
   public hasPlayerPlayed(playerId: string): boolean {
     return this.state.players.get(playerId)?.hasPlayed ?? false;
   }
+
+  public updatePlayerStatus(playerId: string, status: boolean) {
+    this.state.players.set(playerId, { id: playerId, hasPlayed: status });
+  }
+
 }

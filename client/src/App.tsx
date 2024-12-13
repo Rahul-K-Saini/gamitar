@@ -1,16 +1,21 @@
-import { useState, useEffect } from 'react';
-import { Grid } from './components/Grid';
-import { CharacterSelector } from './components/CharacterSelector';
-import { useSocket } from './hooks/useSocket';
+import { useState, useEffect } from "react";
+import { Grid } from "./components/Grid";
+import { CharacterSelector } from "./components/CharacterSelector";
+import { useSocket } from "./hooks/useSocket";
 
 function App() {
   const [grid, setGrid] = useState<string[][]>(
-    Array(10).fill('').map(() => Array(10).fill(''))
+    Array(10)
+      .fill("")
+      .map(() => Array(10).fill(""))
   );
-  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(null);
+  const [selectedCell, setSelectedCell] = useState<[number, number] | null>(
+    null
+  );
   const [hasPlayed, setHasPlayed] = useState(false);
   const [onlineUsers, setOnlineUsers] = useState(1);
-  
+  const [isTimer, setIsTimer] = useState(0);
+
   const socket = useSocket();
 
   useEffect(() => {
@@ -35,7 +40,7 @@ function App() {
   }, [socket]);
 
   const handleCellClick = (row: number, col: number) => {
-    if (!hasPlayed && grid[row][col] === '') {
+    if (!hasPlayed && grid[row][col] === "") {
       setSelectedCell([row, col]);
     }
   };
@@ -43,9 +48,24 @@ function App() {
   const handleCharacterSelect = (character: string) => {
     if (selectedCell) {
       const [row, col] = selectedCell;
+      console.log(row,col)
       socket.updateCell(row, col, character);
-      setSelectedCell(null);
       setHasPlayed(true);
+      setSelectedCell(null);
+      
+      let timeLeft = 60;
+      setIsTimer(timeLeft);
+      
+      const timerInterval = setInterval(() => {
+        timeLeft -= 1;
+        setIsTimer(timeLeft);
+        
+        if (timeLeft == 0) {
+          clearInterval(timerInterval);
+          setHasPlayed(false);
+          socket.updatePlayerStatus(hasPlayed);
+        }
+      }, 1000);
     }
   };
 
@@ -53,6 +73,7 @@ function App() {
     <div className="min-h-screen bg-gray-100 py-8">
       <Grid
         grid={grid}
+        timer={isTimer}
         onCellClick={handleCellClick}
         hasPlayed={hasPlayed}
         onlineUsers={onlineUsers}

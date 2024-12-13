@@ -13,16 +13,14 @@ export class SocketManager {
 
   private setupSocketHandlers(): void {
     this.io.on('connection', (socket: Socket) => {
-      console.log(`Player connected: ${socket.id}`);
-      
-      this.gameState.addPlayer(socket.id);
-      
+      const playerId = socket.id
+      console.log(`Player connected: ${playerId}`);
+      this.gameState.addPlayer(playerId);
       socket.emit('gameState', {
         grid: this.gameState.getGrid(),
         onlinePlayers: this.gameState.getOnlinePlayersCount(),
         hasPlayed: false
       });
-
       this.io.emit('playerCount', this.gameState.getOnlinePlayersCount());
 
       socket.on('updateCell', ({ row, col, value }) => {
@@ -33,6 +31,11 @@ export class SocketManager {
           });
         }
       });
+
+      socket.on('updatePlayerStatus', (status: boolean) => {
+        console.log("updaaatedddsddddddd",status)
+        this.gameState.updatePlayerStatus(playerId, status)
+      })
 
       socket.on('disconnect', () => {
         this.gameState.removePlayer(socket.id);

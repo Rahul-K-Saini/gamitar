@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect } from 'react';
 import { socketService } from '../services/socket';
 
 export const useSocket = () => {
@@ -7,12 +7,17 @@ export const useSocket = () => {
     return () => socketService.disconnect();
   }, []);
 
-  const updateCell = useCallback((row: number, col: number, value: string) => {
+  const updateCell = (row: number, col: number, value: string) => {
     socketService.updateCell(row, col, value);
-  }, []);
+  };
+
+  const updatePlayerStatus = (status:boolean) => {
+    socketService.updatePlayerStatus(status)
+  }
 
   return {
     updateCell,
+    updatePlayerStatus,
     onGameState: (callback: (data: any) => void) => socketService.on('gameState', callback),
     onGridUpdate: (callback: (data: any) => void) => socketService.on('gridUpdate', callback),
     onPlayerCount: (callback: (count: number) => void) => socketService.on('playerCount', callback),

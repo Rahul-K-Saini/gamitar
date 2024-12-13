@@ -5,7 +5,7 @@ class SocketService {
   private listeners: Map<string, ((data?: any) => void)[]> = new Map();
 
   connect() {
-    this.socket = io('http://localhost:3000');
+    this.socket = io('https://gamitar-cj8k.onrender.com');
 
     this.socket.on('connect', () => {
       console.log('Connected to server');
@@ -35,6 +35,12 @@ class SocketService {
   updateCell(row: number, col: number, value: string) {
     if (this.socket) {
       this.socket.emit('updateCell', { row, col, value });
+    }
+  }
+
+  updatePlayerStatus(status: boolean) {
+    if (this.socket) {
+      this.socket.emit('updatePlayerStatus', status);
     }
   }
 
