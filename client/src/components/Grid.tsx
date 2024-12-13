@@ -17,8 +17,8 @@ export const Grid: React.FC<GridProps> = ({
 }) => {
   return (
     <div className="w-full max-w-2xl mx-auto p-4">
-      <div className="flex items-center justify-between mb-6">
         <small className="text-red-400">Note: Please check in local the render free server has 1-2 min of cold start and for some time at start it will not work </small>
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Unicode Grid Game</h1>
         <div className="flex gap-2  items-center">
           <svg
